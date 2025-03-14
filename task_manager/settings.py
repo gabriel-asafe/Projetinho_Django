@@ -94,3 +94,10 @@ AUTH_USER_MODEL = 'accounts.User'
 LOGIN_URL = '/login/'  
 LOGIN_REDIRECT_URL = '/' 
 LOGOUT_REDIRECT_URL = '/login/'  
+
+
+SESSION_COOKIE_AGE = 1209600 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = False  
+SESSION_COOKIE_HTTPONLY = True
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'

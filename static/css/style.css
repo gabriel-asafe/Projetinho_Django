@@ -247,7 +247,7 @@ h2::after {
     position: fixed;
     bottom: 25px;
     right: 25px;
-    background: linear-gradient(135deg, #F4A261, #E76F51);
+    background: linear-gradient(135deg, #1f5a91ef, #3a538a);
     color: #FFFFFF;
     padding: 1rem 1.5rem;
     border-radius: 12px 6px 12px 12px;
@@ -347,7 +347,7 @@ form a:hover {
 }
 
 .status-concluido {
-    color: #2A6F97;
+    color: #085e00;
 }
 
 /* Responsividade */

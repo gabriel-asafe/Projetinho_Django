@@ -26,7 +26,7 @@ def project_create(request):
         form = ProjectForm()
     return render(request, 'projects/project_form.html', {'form': form})
 
-@login_required(login_url='/login/')
+@login_required
 def project_edit(request, pk):
     project = get_object_or_404(Project, pk=pk, dono=request.user)
     if request.method == 'POST':
