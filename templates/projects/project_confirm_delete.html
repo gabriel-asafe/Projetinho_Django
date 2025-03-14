@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Excluir Projeto</h2>
+    <p>Tem certeza que deseja excluir o projeto "{{ project.nome }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, excluir</button>
+        <a href="{% url 'projects:project_list' %}">Cancelar</a>
+    </form>
+{% endblock %}

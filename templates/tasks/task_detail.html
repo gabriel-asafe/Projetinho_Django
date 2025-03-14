@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div style="background-color: #FFFFFF; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); max-width: 600px; margin: 0 auto;">
+        <h2>{{ task.titulo }}</h2>
+        <p><strong>Descrição:</strong> {{ task.descricao|default:"Sem descrição" }}</p>
+        <p><strong>Status:</strong> 
+            <span class="{% if task.is_atrasado %}status-atrasado{% elif task.status == 'pendente' %}status-pendente{% elif task.status == 'andamento' %}status-andamento{% else %}status-concluido{% endif %}">
+                {% if task.is_atrasado %}Atrasado{% else %}{{ task.status|capfirst }}{% endif %}
+            </span>
+        </p>
+        <p><strong>Prioridade:</strong> {{ task.prioridade|capfirst }}</p>
+        <p><strong>Prazo:</strong> {{ task.prazo|date:"d 'de' F 'de' Y 'às' H:i" }}</p>
+        <p><strong>Projeto:</strong> 
+            {% if task.projeto %}
+                <a href="{% url 'projects:project_detail' task.projeto.pk %}">{{ task.projeto.nome }}</a>
+            {% else %}
+                Sem projeto
+            {% endif %}
+        </p>
+        <p><strong>Criado em:</strong> {{ task.data_criacao|date:"d 'de' F 'de' Y 'às' H:i" }}</p>
+        <p><strong>Última atualização:</strong> {{ task.data_atualizacao|date:"d 'de' F 'de' Y 'às' H:i" }}</p>
+        <p><strong>Atribuído a:</strong> {{ task.usuario_atribuido.email }}</p>
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        <div style="margin-top: 1.5rem;">
+            {% if not error %}
+                <a href="{% url 'tasks:task_edit' task.pk %}" style="background-color: #1E88E5; color: #FFFFFF; padding: 0.8rem 1.5rem; border-radius: 6px; text-decoration: none; margin-right: 1rem;">Editar</a>
+            {% endif %}
+            <a href="{% url 'tasks:task_list' %}" style="color: #757575; text-decoration: none;">Voltar</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Excluir Tarefa</h2>
+    <p>Tem certeza que deseja excluir a tarefa "{{ task.titulo }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Sim, excluir</button>
+        <a href="{% url 'tasks:task_list' %}">Cancelar</a>
+    </form>
+{% endblock %}

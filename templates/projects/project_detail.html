@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{{ project.nome }}</h2>
+    <div style="background-color: #FFFFFF; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); margin-bottom: 2rem;">
+        <p><strong>Descrição:</strong> {{ project.descricao|default:"Sem descrição" }}</p>
+        <p><strong>Dono:</strong> {{ project.dono.email }}</p>
+        <p><strong>Membros:</strong> 
+            {% for membro in project.membros.all %}
+                {{ membro.email }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                Nenhum membro além do dono
+            {% endfor %}
+        </p>
+        <p><strong>Criado em:</strong> {{ project.data_criacao|date:"d 'de' F 'de' Y 'às' H:i" }}</p>
+    </div>
+
+    <h2>Tarefas do Projeto</h2>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('pendente')">Pendente</div>
+        <div class="tab" onclick="showTab('andamento')">Em Andamento</div>
+        <div class="tab" onclick="showTab('concluido')">Concluído</div>
+        <div class="tab" onclick="showTab('atrasado')">Atrasado</div>
+    </div>
+
+    <ul class="task-list" id="pendente">
+        {% for task in tasks %}
+            {% if task.status == 'pendente' and not task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-pendente">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas pendentes.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="andamento" style="display: none;">
+        {% for task in tasks %}
+            {% if task.status == 'andamento' and not task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-andamento">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas em andamento.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="concluido" style="display: none;">
+        {% for task in tasks %}
+            {% if task.status == 'concluido' %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-concluido">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas concluídas.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="atrasado" style="display: none;">
+        {% for task in tasks %}
+            {% if task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-atrasado">Atrasado</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas atrasadas.</li>
+        {% endfor %}
+    </ul>
+
+    <div style="margin-top: 1.5rem;">
+        {% if project.dono == user %}
+            <a href="{% url 'projects:project_manage_members' project.pk %}" style="background-color: #FF5722; color: #FFFFFF; padding: 0.8rem 1.5rem; border-radius: 6px; text-decoration: none; margin-right: 1rem;">Gerenciar Membros</a>
+        {% endif %}
+        <a href="{% url 'projects:project_list' %}" style="color: #757575; text-decoration: none;">Voltar</a>
+    </div>
+
+    <script>
+        function showTab(status) {
+            document.querySelectorAll('.task-list').forEach(list => list.style.display = 'none');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(status).style.display = 'block';
+            event.target.classList.add('active');
+        }
+    </script>
+{% endblock %}

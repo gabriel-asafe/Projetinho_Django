@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="manage-members-container">
+        <h2>Gerenciar Membros - {{ project.nome }}</h2>
+
+        <!-- Mensagens de Feedback -->
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <p class="{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}error{% endif %}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Lista de Membros -->
+        <div class="members-list">
+            <h3>Membros Atuais</h3>
+            {% if members %}
+                <ul>
+                    {% for member in members %}
+                        <li class="member-item">
+                            <span class="member-info">
+                                {{ member.first_name|default:member.email }} {% if member == project.dono %}(Dono){% endif %}
+                            </span>
+                            {% if member != project.dono %}
+                                <form method="post" style="display: inline;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="user_id" value="{{ member.id }}">
+                                    <button type="submit" class="btn btn-remove">Remover</button>
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-message">Nenhum membro além do dono.</p>
+            {% endif %}
+        </div>
+
+        <!-- Adicionar Membro -->
+        <div class="add-member">
+            <h3>Adicionar Novo Membro</h3>
+            <form method="post" class="add-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="add">
+                <input type="email" name="email" placeholder="Digite o e-mail do usuário" required>
+                <button type="submit" class="btn btn-add">Adicionar</button>
+            </form>
+        </div>
+
+        <!-- Botão Voltar -->
+        <a href="{% url 'projects:project_detail' project.pk %}" class="btn btn-back">Voltar</a>
+    </div>
+{% endblock %}

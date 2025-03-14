@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Minhas Tarefas</h2>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('pendente')">Pendente</div>
+        <div class="tab" onclick="showTab('andamento')">Em Andamento</div>
+        <div class="tab" onclick="showTab('concluido')">Concluído</div>
+        <div class="tab" onclick="showTab('atrasado')">Atrasado</div>
+    </div>
+
+    <ul class="task-list" id="pendente">
+        {% for task in tasks %}
+            {% if task.status == 'pendente' and not task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-pendente">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                    <span>
+                        <a href="{% url 'tasks:task_edit' task.pk %}">Editar</a>
+                        <a href="{% url 'tasks:task_delete' task.pk %}">Excluir</a>
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas pendentes.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="andamento" style="display: none;">
+        {% for task in tasks %}
+            {% if task.status == 'andamento' and not task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-andamento">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                    <span>
+                        <a href="{% url 'tasks:task_edit' task.pk %}">Editar</a>
+                        <a href="{% url 'tasks:task_delete' task.pk %}">Excluir</a>
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas em andamento.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="concluido" style="display: none;">
+        {% for task in tasks %}
+            {% if task.status == 'concluido' %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-concluido">{{ task.status|capfirst }}</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                    <span>
+                        <a href="{% url 'tasks:task_edit' task.pk %}">Editar</a>
+                        <a href="{% url 'tasks:task_delete' task.pk %}">Excluir</a>
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas concluídas.</li>
+        {% endfor %}
+    </ul>
+
+    <ul class="task-list" id="atrasado" style="display: none;">
+        {% for task in tasks %}
+            {% if task.is_atrasado %}
+                <li>
+                    <span>
+                        <a href="{% url 'tasks:task_detail' task.pk %}">{{ task.titulo }}</a> - 
+                        <span class="status-atrasado">Atrasado</span> - 
+                        {{ task.prioridade|capfirst }}
+                    </span>
+                    <span>
+                        <a href="{% url 'tasks:task_edit' task.pk %}">Editar</a>
+                        <a href="{% url 'tasks:task_delete' task.pk %}">Excluir</a>
+                    </span>
+                </li>
+            {% endif %}
+        {% empty %}
+            <li>Sem tarefas atrasadas.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'tasks:task_create' %}" style="position: fixed; bottom: 20px; right: 20px; background-color: #FF5722; color: #FFFFFF; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">+ Nova Tarefa</a>
+
+    <script>
+        function showTab(status) {
+            document.querySelectorAll('.task-list').forEach(list => list.style.display = 'none');
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(status).style.display = 'block';
+            event.target.classList.add('active');
+        }
+    </script>
+{% endblock %}

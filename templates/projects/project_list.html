@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Meus Projetos</h2>
+
+    <div class="project-container">
+        {% for project in projects %}
+            <div class="project-card">
+                <h3>{{ project.nome }}</h3>
+                <p class="description">{{ project.descricao|truncatewords:10|default:"Sem descrição" }}</p>
+                <p><strong>Dono:</strong> {{ project.dono.email }}</p>
+                <p><strong>Tarefas:</strong> {{ project.tarefas.count }}</p>
+                <div class="actions">
+                    <a href="{% url 'projects:project_detail' project.pk %}" class="btn btn-detail">Detalhes</a>
+                    {% if project.dono == user %}
+                        <a href="{% url 'projects:project_edit' project.pk %}" class="btn btn-edit">Editar</a>
+                        <a href="{% url 'projects:project_delete' project.pk %}" class="btn btn-delete">Excluir</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-message">Você ainda não tem projetos. Crie um agora!</p>
+        {% endfor %}
+    </div>
+
+    <a href="{% url 'projects:project_create' %}" class="fab">+ Novo Projeto</a>
+{% endblock %}
