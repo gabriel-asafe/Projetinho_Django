@@ -3,16 +3,16 @@
     <div class="manage-members-container">
         <h2>Gerenciar Membros - {{ project.nome }}</h2>
 
-        <!-- Mensagens de Feedback -->
+  
         {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
+        <div class="messages">
+            {% for message in messages %}
+                {% if message.extra_tags == 'members' %}
                     <p class="{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}error{% endif %}">{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-
-        <!-- Lista de Membros -->
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
         <div class="members-list">
             <h3>Membros Atuais</h3>
             {% if members %}
@@ -38,7 +38,7 @@
             {% endif %}
         </div>
 
-        <!-- Adicionar Membro -->
+ 
         <div class="add-member">
             <h3>Adicionar Novo Membro</h3>
             <form method="post" class="add-form">
@@ -49,7 +49,7 @@
             </form>
         </div>
 
-        <!-- Botão Voltar -->
+
         <a href="{% url 'projects:project_detail' project.pk %}" class="btn btn-back">Voltar</a>
     </div>
 {% endblock %}

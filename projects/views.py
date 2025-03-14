@@ -52,7 +52,7 @@ def project_detail(request, pk):
     tasks = project.tarefas.all()
     return render(request, 'projects/project_detail.html', {'project': project, 'tasks': tasks})
 
-@login_required(login_url='/login/')
+@login_required(login_url='/accounts/login/')
 def project_manage_members(request, pk):
     project = get_object_or_404(Project, pk=pk, dono=request.user)
     if request.method == 'POST':
@@ -63,19 +63,19 @@ def project_manage_members(request, pk):
                 user_to_add = User.objects.get(email=email)
                 if user_to_add not in project.membros.all():
                     project.membros.add(user_to_add)
-                    messages.success(request, f'{user_to_add.first_name or user_to_add.email} adicionado ao projeto.')
+                    messages.success(request, f'{user_to_add.first_name or user_to_add.email} adicionado ao projeto.', extra_tags='members')
                 else:
-                    messages.warning(request, f'{user_to_add.first_name or user_to_add.email} já é membro.')
+                    messages.warning(request, f'{user_to_add.first_name or user_to_add.email} já é membro.', extra_tags='members')
             except User.DoesNotExist:
-                messages.error(request, f'Usuário com e-mail {email} não encontrado.')
+                messages.error(request, f'Usuário com e-mail {email} não encontrado.', extra_tags='members')
         elif action == 'remove':
             user_id = request.POST.get('user_id')
             user_to_remove = get_object_or_404(User, id=user_id)
             if user_to_remove in project.membros.all() and user_to_remove != project.dono:
                 project.membros.remove(user_to_remove)
-                messages.success(request, f'{user_to_remove.first_name or user_to_remove.email} removido do projeto.')
+                messages.success(request, f'{user_to_remove.first_name or user_to_remove.email} removido do projeto.', extra_tags='members')
             else:
-                messages.warning(request, 'Não é possível remover este usuário.')
+                messages.warning(request, 'Não é possível remover este usuário.', extra_tags='members')
         return redirect('projects:project_manage_members', pk=project.pk)
 
     return render(request, 'projects/project_manage_members.html', {

@@ -22,6 +22,15 @@
         </nav>
     </header>
     <main>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                {% if not message.extra_tags or message.extra_tags != 'members' %}
+                    <p class="{% if message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}error{% endif %}">{{ message }}</p>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
         {% block content %}
         {% endblock %}
     </main>
