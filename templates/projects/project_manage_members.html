@@ -3,7 +3,6 @@
     <div class="manage-members-container">
         <h2>Gerenciar Membros - {{ project.nome }}</h2>
 
-  
         {% if messages %}
         <div class="messages">
             {% for message in messages %}
@@ -13,6 +12,7 @@
             {% endfor %}
         </div>
     {% endif %}
+
         <div class="members-list">
             <h3>Membros Atuais</h3>
             {% if members %}

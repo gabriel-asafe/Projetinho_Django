@@ -213,7 +213,7 @@ h2::after {
 
 .btn-edit {
     background-color: #F4A261;
-    color: #1A1A1A;
+    color: #ffffff;
 }
 
 .btn-edit:hover {
@@ -343,7 +343,7 @@ form a:hover {
 }
 
 .status-andamento {
-    color: #F4A261;
+    color: #6183f4;
 }
 
 .status-concluido {
@@ -659,7 +659,7 @@ form a:hover {
 }
 
 .member-info {
-    color: #1A1A1A;
+    color: #be8519;
     font-size: 1rem;
 }
 
